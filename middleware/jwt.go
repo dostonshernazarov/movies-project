@@ -9,7 +9,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// JWTAuthMiddleware is a middleware that validates JWT tokens
 func JWTAuthMiddleware() gin.HandlerFunc {
 	jwtService := services.NewJWTService()
 
@@ -21,14 +20,10 @@ func JWTAuthMiddleware() gin.HandlerFunc {
 			return
 		}
 
-		// If authorization header has Bearer prefix, remove it
 		if strings.HasPrefix(authHeader, "Bearer ") {
 			authHeader = strings.TrimPrefix(authHeader, "Bearer ")
 		}
 
-		// Extract token
-
-		// Validate token
 		token, err := jwtService.ValidateToken(authHeader)
 		if err != nil || !token.Valid {
 			ctx.JSON(http.StatusUnauthorized, models.ErrorResponse{Error: "Invalid or expired token"})
@@ -36,7 +31,6 @@ func JWTAuthMiddleware() gin.HandlerFunc {
 			return
 		}
 
-		// Extract user ID from token
 		userID := jwtService.ExtractUserID(token)
 		ctx.Set("user_id", userID)
 
@@ -44,7 +38,6 @@ func JWTAuthMiddleware() gin.HandlerFunc {
 	}
 }
 
-// GetUserID gets the user ID from the context
 func GetUserID(ctx *gin.Context) uint {
 	userID, exists := ctx.Get("user_id")
 	if !exists {

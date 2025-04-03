@@ -14,17 +14,14 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
-// App represents the application
 type App struct {
 	Engine *gin.Engine
 }
 
-// Run starts the application server
 func (a *App) Run(addr string) error {
 	return a.Engine.Run(addr)
 }
 
-// InitializeApp initializes and returns the application
 func InitializeApp() (*App, error) {
 	var app App
 
@@ -45,10 +42,8 @@ func InitializeApp() (*App, error) {
 		fx.Provide(controllers.NewAuthController),
 		fx.Provide(controllers.NewMovieController),
 
-		// Provide Gin engine with routes
 		fx.Provide(NewGinEngine),
 
-		// Inject the engine into the app
 		fx.Populate(&app.Engine),
 	).Err()
 
@@ -74,7 +69,6 @@ func NewGinEngine(
 ) *gin.Engine {
 	engine := gin.Default()
 
-	// Add middleware
 	engine.Use(middleware.CORSMiddleware())
 
 	// Auth routes
@@ -84,11 +78,9 @@ func NewGinEngine(
 		authRoutes.POST("/login", authController.Login)
 	}
 
-	// API routes with JWT auth
 	apiRoutes := engine.Group("/api")
 	apiRoutes.Use(middleware.JWTAuthMiddleware())
 	{
-		// Movie routes
 		movies := apiRoutes.Group("/movies")
 		{
 			movies.GET("", movieController.GetAllMovies)

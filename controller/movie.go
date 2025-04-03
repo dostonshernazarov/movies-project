@@ -11,12 +11,10 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// MovieController handles movie-related requests
 type MovieController struct {
 	MovieService *services.MovieService
 }
 
-// NewMovieController creates a new movie controller
 func NewMovieController(movieService *services.MovieService) *MovieController {
 	return &MovieController{
 		MovieService: movieService,

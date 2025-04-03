@@ -10,13 +10,11 @@ import (
 	"github.com/golang-jwt/jwt/v4"
 )
 
-// JWTService handles JWT operations
 type JWTService struct {
 	secretKey string
 	issuer    string
 }
 
-// NewJWTService creates a new JWT service
 func NewJWTService() *JWTService {
 	return &JWTService{
 		secretKey: getEnv("JWT_SECRET", "your-secret-key"),
@@ -24,9 +22,7 @@ func NewJWTService() *JWTService {
 	}
 }
 
-// GenerateToken generates a new JWT token
 func (s *JWTService) GenerateToken(user models.User) string {
-	// Set expiration time (24 hours)
 	expDuration, _ := strconv.Atoi(getEnv("TOKEN_HOUR_LIFESPAN", "24"))
 	claims := jwt.MapClaims{
 		"user_id":  user.ID,
@@ -46,7 +42,6 @@ func (s *JWTService) GenerateToken(user models.User) string {
 	return tokenString
 }
 
-// ValidateToken validates a JWT token
 func (s *JWTService) ValidateToken(tokenString string) (*jwt.Token, error) {
 	return jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
@@ -56,14 +51,12 @@ func (s *JWTService) ValidateToken(tokenString string) (*jwt.Token, error) {
 	})
 }
 
-// ExtractUserID extracts the user ID from a JWT token
 func (s *JWTService) ExtractUserID(token *jwt.Token) uint {
 	claims := token.Claims.(jwt.MapClaims)
 	id, _ := strconv.ParseUint(fmt.Sprintf("%.0f", claims["user_id"]), 10, 32)
 	return uint(id)
 }
 
-// getEnv retrieves an environment variable or returns a default value
 func getEnv(key, defaultValue string) string {
 	if value, exists := os.LookupEnv(key); exists {
 		return value

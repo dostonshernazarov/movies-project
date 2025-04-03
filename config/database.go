@@ -10,7 +10,6 @@ import (
 	"gorm.io/gorm"
 )
 
-// NewDatabaseConnection creates a new database connection
 func NewDatabaseConnection() *gorm.DB {
 	dbConfig := DatabaseConfig{
 		Host:     getEnv("DB_HOST", "localhost"),
@@ -28,7 +27,6 @@ func NewDatabaseConnection() *gorm.DB {
 		log.Fatalf("Failed to connect to database: %v", err)
 	}
 
-	// Auto migrate tables
 	if err := db.AutoMigrate(&models.User{}, &models.Movie{}); err != nil {
 		log.Fatalf("Failed to auto migrate tables: %v", err)
 	}
@@ -36,7 +34,6 @@ func NewDatabaseConnection() *gorm.DB {
 	return db
 }
 
-// getEnv retrieves an environment variable or returns a default value
 func getEnv(key, defaultValue string) string {
 	if value, exists := os.LookupEnv(key); exists {
 		return value

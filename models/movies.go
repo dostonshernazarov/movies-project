@@ -6,7 +6,6 @@ import (
 	"gorm.io/gorm"
 )
 
-// Movie represents a movie in the database
 type Movie struct {
 	gorm.Model
 	Title     string    `gorm:"size:255;not null" json:"title" binding:"required"`

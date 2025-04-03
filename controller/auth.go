@@ -9,12 +9,10 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// AuthController handles authentication-related requests
 type AuthController struct {
 	AuthService *services.AuthService
 }
 
-// NewAuthController creates a new authentication controller
 func NewAuthController(authService *services.AuthService) *AuthController {
 	return &AuthController{
 		AuthService: authService,
