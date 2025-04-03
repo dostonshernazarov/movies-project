@@ -1,4 +1,4 @@
-# Movies CRUD API
+# Movies APP
 
 A RESTful API for managing movie records built with Go, Gin, GORM, and UberFx.
 
