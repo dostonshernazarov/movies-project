@@ -13,7 +13,7 @@ import (
 func NewDatabaseConnection() *gorm.DB {
 	dbConfig := DatabaseConfig{
 		Host:     getEnv("DB_HOST", "localhost"),
-		Port:     getEnv("DB_PORT", "5432"),
+		Port:     getEnv("DB_PORT", "5430"),
 		User:     getEnv("DB_USER", "postgres"),
 		Password: getEnv("DB_PASSWORD", "doston"),
 		DBName:   getEnv("DB_NAME", "movies_db"),

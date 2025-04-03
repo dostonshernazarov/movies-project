@@ -12,7 +12,7 @@ services:
       - DB_HOST=db
       - DB_PORT=5432
       - DB_USER=postgres
-      - DB_PASSWORD=root
+      - DB_PASSWORD=doston
       - DB_NAME=movies_db
       - JWT_SECRET=movies-app-secret-key
       - TOKEN_HOUR_LIFESPAN=24
@@ -22,10 +22,10 @@ services:
   db:
     image: postgres:14
     ports:
-      - "5432:5432"
+      - "5430:5432"
     environment:
       - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=password
+      - POSTGRES_PASSWORD=doston
       - POSTGRES_DB=movies_db
     volumes:
       - postgres_data:/var/lib/postgresql/data
