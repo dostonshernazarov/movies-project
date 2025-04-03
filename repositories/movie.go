@@ -20,7 +20,7 @@ func NewMovieRepository(db *gorm.DB) *MovieRepository {
 // GetAll retrieves all movies
 func (r *MovieRepository) GetAll() ([]models.Movie, error) {
 	var movies []models.Movie
-	result := r.DB.Find(&movies)
+	result := r.DB.Select("id, title, director, year, plot, genre, rating, user_id, created_at, updated_at").Find(&movies)
 	return movies, result.Error
 }
 

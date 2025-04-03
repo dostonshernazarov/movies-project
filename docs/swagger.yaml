@@ -18,6 +18,25 @@ definitions:
       error:
         type: string
     type: object
+  models.MovieCreateResponse:
+    properties:
+      created_at:
+        type: string
+      director:
+        type: string
+      genre:
+        type: string
+      plot:
+        type: string
+      rating:
+        type: number
+      title:
+        type: string
+      updated_at:
+        type: string
+      year:
+        type: integer
+    type: object
   models.MovieRequest:
     properties:
       director:
@@ -45,6 +64,8 @@ definitions:
         type: string
       genre:
         type: string
+      id:
+        type: integer
       plot:
         type: string
       rating:
@@ -53,6 +74,8 @@ definitions:
         type: string
       updated_at:
         type: string
+      user_id:
+        type: integer
       year:
         type: integer
     type: object
@@ -146,7 +169,7 @@ paths:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/models.MovieResponse'
+            $ref: '#/definitions/models.MovieCreateResponse'
         "400":
           description: Bad Request
           schema:

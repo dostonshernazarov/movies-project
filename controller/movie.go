@@ -42,14 +42,16 @@ func (c *MovieController) GetAllMovies(ctx *gin.Context) {
 	movieResponses := make([]models.MovieResponse, len(movies))
 	for i, movie := range movies {
 		movieResponses[i] = models.MovieResponse{
+			ID:        movie.ID,
 			Title:     movie.Title,
 			Director:  movie.Director,
 			Year:      movie.Year,
 			Plot:      movie.Plot,
 			Genre:     movie.Genre,
 			Rating:    movie.Rating,
-			CreatedAt: movie.CreatedAt.Format(time.RFC3339),
-			UpdatedAt: movie.UpdatedAt.Format(time.RFC3339),
+			UserID:    movie.UserID,
+			CreatedAt: movie.CreatedAt,
+			UpdatedAt: movie.UpdatedAt,
 		}
 	}
 
@@ -84,14 +86,16 @@ func (c *MovieController) GetMovieByID(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, models.MovieResponse{
+		ID:        uint(id),
 		Title:     movie.Title,
 		Director:  movie.Director,
 		Year:      movie.Year,
 		Plot:      movie.Plot,
 		Genre:     movie.Genre,
 		Rating:    movie.Rating,
-		CreatedAt: movie.CreatedAt.Format(time.RFC3339),
-		UpdatedAt: movie.UpdatedAt.Format(time.RFC3339),
+		UserID:    movie.UserID,
+		CreatedAt: movie.CreatedAt,
+		UpdatedAt: movie.UpdatedAt,
 	})
 }
 
@@ -102,7 +106,7 @@ func (c *MovieController) GetMovieByID(ctx *gin.Context) {
 // @Produce json
 // @Tags Movies
 // @Param movie body models.MovieRequest true "Movie details"
-// @Success 201 {object} models.MovieResponse
+// @Success 201 {object} models.MovieCreateResponse
 // @Failure 400 {object} models.ErrorResponse
 // @Router /api/movies [post]
 func (c *MovieController) CreateMovie(ctx *gin.Context) {
@@ -130,12 +134,15 @@ func (c *MovieController) CreateMovie(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusCreated, models.MovieResponse{
-		Title:    movie.Title,
-		Director: movie.Director,
-		Year:     movie.Year,
-		Plot:     movie.Plot,
-		Genre:    movie.Genre,
+	ctx.JSON(http.StatusCreated, models.MovieCreateResponse{
+		Title:     movie.Title,
+		Director:  movie.Director,
+		Year:      movie.Year,
+		Plot:      movie.Plot,
+		Genre:     movie.Genre,
+		Rating:    movie.Rating,
+		CreatedAt: movie.CreatedAt.Format(time.RFC3339),
+		UpdatedAt: movie.UpdatedAt.Format(time.RFC3339),
 	})
 }
 
@@ -196,11 +203,16 @@ func (c *MovieController) UpdateMovie(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, models.MovieResponse{
-		Title:    existingMovie.Title,
-		Director: existingMovie.Director,
-		Year:     existingMovie.Year,
-		Plot:     existingMovie.Plot,
-		Genre:    existingMovie.Genre,
+		ID:        uint(id),
+		Title:     existingMovie.Title,
+		Director:  existingMovie.Director,
+		Year:      existingMovie.Year,
+		Plot:      existingMovie.Plot,
+		Genre:     existingMovie.Genre,
+		Rating:    existingMovie.Rating,
+		UserID:    existingMovie.UserID,
+		CreatedAt: existingMovie.CreatedAt,
+		UpdatedAt: existingMovie.UpdatedAt,
 	})
 }
 

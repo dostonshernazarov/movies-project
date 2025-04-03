@@ -1,5 +1,7 @@
 package models
 
+import "time"
+
 // UserRegisterRequest represents user registration data
 type UserRegisterRequest struct {
 	Username string `json:"username" binding:"required"`
@@ -32,7 +34,7 @@ type MovieRequest struct {
 	Rating   float32 `json:"rating"`
 }
 
-type MovieResponse struct {
+type MovieCreateResponse struct {
 	Title     string  `json:"title"`
 	Director  string  `json:"director"`
 	Year      int     `json:"year"`
@@ -41,6 +43,19 @@ type MovieResponse struct {
 	Rating    float32 `json:"rating"`
 	CreatedAt string  `json:"created_at"`
 	UpdatedAt string  `json:"updated_at"`
+}
+
+type MovieResponse struct {
+	ID        uint      `json:"id"`
+	Title     string    `json:"title"`
+	Director  string    `json:"director"`
+	Year      int       `json:"year"`
+	Plot      string    `json:"plot"`
+	Genre     string    `json:"genre"`
+	Rating    float32   `json:"rating"`
+	UserID    uint      `json:"user_id"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
 }
 
 // ErrorResponse represents an error response

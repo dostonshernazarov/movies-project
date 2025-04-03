@@ -83,7 +83,7 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/models.MovieResponse"
+                            "$ref": "#/definitions/models.MovieCreateResponse"
                         }
                     },
                     "400": {
@@ -369,6 +369,35 @@ const docTemplate = `{
                 }
             }
         },
+        "models.MovieCreateResponse": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "director": {
+                    "type": "string"
+                },
+                "genre": {
+                    "type": "string"
+                },
+                "plot": {
+                    "type": "string"
+                },
+                "rating": {
+                    "type": "number"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "year": {
+                    "type": "integer"
+                }
+            }
+        },
         "models.MovieRequest": {
             "type": "object",
             "required": [
@@ -409,6 +438,9 @@ const docTemplate = `{
                 "genre": {
                     "type": "string"
                 },
+                "id": {
+                    "type": "integer"
+                },
                 "plot": {
                     "type": "string"
                 },
@@ -420,6 +452,9 @@ const docTemplate = `{
                 },
                 "updated_at": {
                     "type": "string"
+                },
+                "user_id": {
+                    "type": "integer"
                 },
                 "year": {
                     "type": "integer"
