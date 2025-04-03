@@ -3,11 +3,15 @@ package core
 import (
 	"github.com/dostonshernazarov/movies-app/config"
 	controllers "github.com/dostonshernazarov/movies-app/controller"
+	_ "github.com/dostonshernazarov/movies-app/docs"
 	"github.com/dostonshernazarov/movies-app/middleware"
 	"github.com/dostonshernazarov/movies-app/repositories"
 	"github.com/dostonshernazarov/movies-app/services"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/fx"
+
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 // App represents the application
@@ -30,10 +34,12 @@ func InitializeApp() (*App, error) {
 
 		// Provide repositories
 		fx.Provide(repositories.NewMovieRepository),
+		fx.Provide(repositories.NewUserRepository),
 
 		// Provide services
 		fx.Provide(services.NewJWTService),
 		fx.Provide(services.NewMovieService),
+		fx.Provide(services.NewAuthService),
 
 		// Provide controllers
 		fx.Provide(controllers.NewAuthController),
@@ -50,6 +56,18 @@ func InitializeApp() (*App, error) {
 }
 
 // NewGinEngine creates and configures the Gin engine with routes
+// @title Movies API
+// @version 1.0
+// @description API for managing movies
+// @host localhost:8060
+// @BasePath /
+// @securityDefinitions.apikey BearerAuth
+// @in header
+// @name Authorization
+// @type string
+// @description The token for the user
+// @required
+// @default Bearer
 func NewGinEngine(
 	movieController *controllers.MovieController,
 	authController *controllers.AuthController,
@@ -80,6 +98,9 @@ func NewGinEngine(
 			movies.DELETE("/:id", movieController.DeleteMovie)
 		}
 	}
+
+	url := ginSwagger.URL("swagger/doc.json")
+	engine.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, url))
 
 	return engine
 }

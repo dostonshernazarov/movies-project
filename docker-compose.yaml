@@ -1,0 +1,40 @@
+version: '3'
+
+services:
+  app:
+    build: .
+    ports:
+      - "8060:8060"
+    depends_on:
+      - db
+    environment:
+      - PORT=8060
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_USER=postgres
+      - DB_PASSWORD=root
+      - DB_NAME=movies_db
+      - JWT_SECRET=movies-app-secret-key
+      - TOKEN_HOUR_LIFESPAN=24
+    networks:
+      - app-network
+
+  db:
+    image: postgres:14
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=movies_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  postgres_data:

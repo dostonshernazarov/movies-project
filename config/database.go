@@ -16,7 +16,7 @@ func NewDatabaseConnection() *gorm.DB {
 		Host:     getEnv("DB_HOST", "localhost"),
 		Port:     getEnv("DB_PORT", "5432"),
 		User:     getEnv("DB_USER", "postgres"),
-		Password: getEnv("DB_PASSWORD", "password"),
+		Password: getEnv("DB_PASSWORD", "doston"),
 		DBName:   getEnv("DB_NAME", "movies_db"),
 	}
 

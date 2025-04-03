@@ -21,18 +21,15 @@ func JWTAuthMiddleware() gin.HandlerFunc {
 			return
 		}
 
-		// Check if authorization header has Bearer prefix
-		if !strings.HasPrefix(authHeader, "Bearer ") {
-			ctx.JSON(http.StatusUnauthorized, models.ErrorResponse{Error: "Invalid authorization format"})
-			ctx.Abort()
-			return
+		// If authorization header has Bearer prefix, remove it
+		if strings.HasPrefix(authHeader, "Bearer ") {
+			authHeader = strings.TrimPrefix(authHeader, "Bearer ")
 		}
 
 		// Extract token
-		tokenString := strings.TrimPrefix(authHeader, "Bearer ")
 
 		// Validate token
-		token, err := jwtService.ValidateToken(tokenString)
+		token, err := jwtService.ValidateToken(authHeader)
 		if err != nil || !token.Valid {
 			ctx.JSON(http.StatusUnauthorized, models.ErrorResponse{Error: "Invalid or expired token"})
 			ctx.Abort()

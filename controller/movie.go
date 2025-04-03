@@ -3,6 +3,7 @@ package controllers
 import (
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/dostonshernazarov/movies-app/middleware"
 	"github.com/dostonshernazarov/movies-app/models"
@@ -22,7 +23,15 @@ func NewMovieController(movieService *services.MovieService) *MovieController {
 	}
 }
 
-// GetAllMovies handles GET /api/movies
+// @Summary Get all movies
+// @Security BearerAuth
+// @Description Get all movies from the database
+// @Accept json
+// @Produce json
+// @Tags Movies
+// @Success 200 {array} models.Movies
+// @Failure 500 {object} models.ErrorResponse
+// @Router /api/movies [get]
 func (c *MovieController) GetAllMovies(ctx *gin.Context) {
 	movies, err := c.MovieService.GetAllMovies()
 	if err != nil {
@@ -30,10 +39,36 @@ func (c *MovieController) GetAllMovies(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, movies)
+	movieResponses := make([]models.MovieResponse, len(movies))
+	for i, movie := range movies {
+		movieResponses[i] = models.MovieResponse{
+			Title:     movie.Title,
+			Director:  movie.Director,
+			Year:      movie.Year,
+			Plot:      movie.Plot,
+			Genre:     movie.Genre,
+			Rating:    movie.Rating,
+			CreatedAt: movie.CreatedAt.Format(time.RFC3339),
+			UpdatedAt: movie.UpdatedAt.Format(time.RFC3339),
+		}
+	}
+
+	ctx.JSON(http.StatusOK, models.Movies{
+		Movies: movieResponses,
+	})
 }
 
-// GetMovieByID handles GET /api/movies/:id
+// @Summary Get a movie by ID
+// @Security BearerAuth
+// @Description Get a movie by ID from the database
+// @Accept json
+// @Produce json
+// @Tags Movies
+// @Param id path string true "Movie ID"
+// @Success 200 {object} models.MovieResponse
+// @Failure 400 {object} models.ErrorResponse
+// @Failure 404 {object} models.ErrorResponse
+// @Router /api/movies/{id} [get]
 func (c *MovieController) GetMovieByID(ctx *gin.Context) {
 	idParam := ctx.Param("id")
 	id, err := strconv.ParseUint(idParam, 10, 32)
@@ -48,10 +83,28 @@ func (c *MovieController) GetMovieByID(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, movie)
+	ctx.JSON(http.StatusOK, models.MovieResponse{
+		Title:     movie.Title,
+		Director:  movie.Director,
+		Year:      movie.Year,
+		Plot:      movie.Plot,
+		Genre:     movie.Genre,
+		Rating:    movie.Rating,
+		CreatedAt: movie.CreatedAt.Format(time.RFC3339),
+		UpdatedAt: movie.UpdatedAt.Format(time.RFC3339),
+	})
 }
 
-// CreateMovie handles POST /api/movies
+// @Summary Create a new movie
+// @Security BearerAuth
+// @Description Create a new movie with title, director, year, plot, genre, and rating
+// @Accept json
+// @Produce json
+// @Tags Movies
+// @Param movie body models.MovieRequest true "Movie details"
+// @Success 201 {object} models.MovieResponse
+// @Failure 400 {object} models.ErrorResponse
+// @Router /api/movies [post]
 func (c *MovieController) CreateMovie(ctx *gin.Context) {
 	var movieRequest models.MovieRequest
 	if err := ctx.ShouldBindJSON(&movieRequest); err != nil {
@@ -77,10 +130,28 @@ func (c *MovieController) CreateMovie(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusCreated, movie)
+	ctx.JSON(http.StatusCreated, models.MovieResponse{
+		Title:    movie.Title,
+		Director: movie.Director,
+		Year:     movie.Year,
+		Plot:     movie.Plot,
+		Genre:    movie.Genre,
+	})
 }
 
-// UpdateMovie handles PUT /api/movies/:id
+// @Summary Update a movie
+// @Security BearerAuth
+// @Description Update a movie with title, director, year, plot, genre, and rating
+// @Accept json
+// @Produce json
+// @Tags Movies
+// @Param id path string true "Movie ID"
+// @Param movie body models.MovieRequest true "Movie details"
+// @Success 200 {object} models.MovieResponse
+// @Failure 400 {object} models.ErrorResponse
+// @Failure 404 {object} models.ErrorResponse
+// @Failure 403 {object} models.ErrorResponse
+// @Router /api/movies/{id} [put]
 func (c *MovieController) UpdateMovie(ctx *gin.Context) {
 	idParam := ctx.Param("id")
 	id, err := strconv.ParseUint(idParam, 10, 32)
@@ -124,10 +195,27 @@ func (c *MovieController) UpdateMovie(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, existingMovie)
+	ctx.JSON(http.StatusOK, models.MovieResponse{
+		Title:    existingMovie.Title,
+		Director: existingMovie.Director,
+		Year:     existingMovie.Year,
+		Plot:     existingMovie.Plot,
+		Genre:    existingMovie.Genre,
+	})
 }
 
-// DeleteMovie handles DELETE /api/movies/:id
+// @Summary Delete a movie
+// @Security BearerAuth
+// @Description Delete a movie by ID from the database
+// @Accept json
+// @Produce json
+// @Tags Movies
+// @Param id path string true "Movie ID"
+// @Success 200 {object} string
+// @Failure 400 {object} models.ErrorResponse
+// @Failure 404 {object} models.ErrorResponse
+// @Failure 403 {object} models.ErrorResponse
+// @Router /api/movies/{id} [delete]
 func (c *MovieController) DeleteMovie(ctx *gin.Context) {
 	idParam := ctx.Param("id")
 	id, err := strconv.ParseUint(idParam, 10, 32)
