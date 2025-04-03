@@ -1,4 +1,4 @@
-# Movies CRUD API
+# Movies APP
 
 A RESTful API for managing movie records built with Go, Gin, GORM, and UberFx.
 
@@ -25,7 +25,7 @@ A RESTful API for managing movie records built with Go, Gin, GORM, and UberFx.
 ## Project Structure
 
 ```
-movies-api/
+movies-project/
 ├── config/             # Configuration
 ├── controllers/        # HTTP request handlers
 ├── core/               # Application core
